@@ -1,0 +1,122 @@
+import { useState } from "react";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+
+const containerStyle = { width: "100%", height: "400px" };
+const defaultCenter = { lat: 37.337, lng: 127.268 };
+
+//거리 계산 함수
+function getDistance(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLng = (lng2 - lng1) * (Math.PI / 180);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLng / 2) ** 2;
+
+  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+
+function App() {
+  const [category, setCategory] = useState("restaurant");
+  const [places, setPlaces] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [userLocation, setUserLocation] = useState(null);
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+  });
+
+  const fetchPlaces = async () => {
+    if (!userLocation) {
+      alert("내 위치를 먼저 가져와 주세요.");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/places/${category}?lat=${userLocation.lat}&lng=${userLocation.lng}`
+      );
+      if (!res.ok) throw new Error("서버 에러");
+      const data = await res.json();
+      setPlaces(data);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) =>
+          setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        (err) => alert("위치 정보를 가져오지 못했습니다.")
+      );
+    } else {
+      alert("브라우저에서 위치 정보를 지원하지 않습니다.");
+    }
+  };
+
+  return (
+    <div style={{ padding: 30, fontFamily: "sans-serif" }}>
+      <h1>위치 기반 가맹점 추천 서비스</h1>
+
+      <div style={{ marginBottom: 20 }}>
+        <button onClick={() => setCategory("restaurant")}>🍽 식당</button>
+        <button onClick={() => setCategory("cafe")}>☕ 카페</button>
+        <button onClick={() => setCategory("karaoke")}>🎤 노래방</button>
+      </div>
+
+      <div style={{ marginBottom: 20 }}>
+        <button onClick={fetchPlaces} disabled={loading}>
+          {loading ? "불러오는 중..." : "추천받기"}
+        </button>
+        <button onClick={getUserLocation}>📍 내 위치 가져오기</button>
+      </div>
+
+      {error && <p style={{ color: "red" }}>❌ {error}</p>}
+
+      <ul>
+        {places.map((p, i) => (
+          <li key={i} style={{ marginBottom: 10 }}>
+            <b>{p.name}</b> <br />
+            {p.address} <br />
+            {userLocation && (
+              <span>
+                📍 거리: {getDistance(
+                  userLocation.lat,
+                  userLocation.lng,
+                  p.lat,
+                  p.lng
+                ).toFixed(2)} km
+              </span>
+            )}
+            <br />
+            <a href={p.link} target="_blank">지도에서 보기</a>
+          </li>
+        ))}
+      </ul>
+
+      {isLoaded && (
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={userLocation || defaultCenter}
+          zoom={15}
+        >
+          {places.map((p, i) => (
+            <Marker key={i} position={{ lat: p.lat, lng: p.lng }} title={p.name} />
+          ))}
+          {userLocation && <Marker position={userLocation} title="내 위치" />}
+        </GoogleMap>
+      )}
+    </div>
+  );
+}
+
+export default App;
