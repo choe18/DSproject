@@ -33,6 +33,7 @@ DSproject/
 ├── .env                   # API Key 설정
 ├── .gitignore
 └── README.md
+```
 
 ---
 
