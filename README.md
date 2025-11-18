@@ -21,15 +21,16 @@
 
 ## 3. 프로젝트 구조
 
+```text
 DSproject/
-├── backend/ # FastAPI 서버
-│ ├── app.py # API 서버 메인 코드
-│ └── venv/ # 가상환경 (업로드 제외)
-├── frontend/ # React 프론트엔드 (Vite 기반)
-│ ├── src/
-│ │ └── App.jsx
-│ └── node_modules/ # 설치 패키지 (업로드 제외)
-├── .env # API Key 설정
+├── backend/               # FastAPI 서버
+│   ├── app.py             # API 서버 메인 코드
+│   └── venv/              # 가상환경 (업로드 제외)
+├── frontend/              # React 프론트엔드 (Vite 기반)
+│   ├── src/
+│   │   └── App.jsx
+│   └── node_modules/      # 설치 패키지 (업로드 제외)
+├── .env                   # API Key 설정
 ├── .gitignore
 └── README.md
 
