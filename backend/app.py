@@ -6,11 +6,12 @@ import requests
 from math import radians, cos, sin, asin, sqrt
 import random
 
-
 # .env
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
 
+# 지원하는 카테고리
+VALID_CATEGORIES = ["restaurant", "cafe"]
 
 # 자료 구조 클래스
 class Node:
@@ -54,7 +55,6 @@ class PlaceGraph:
         nodes.sort(key=lambda n: self.haversine(n, target))
         return nodes
 
-
 # 선형 구조: 최근 추천 Stack/Queue
 class Stack:
     def __init__(self):
@@ -72,8 +72,6 @@ class Queue:
     def dequeue(self):
         return self._q.pop(0) if self._q else None
 
-
-
 # FastAPI 세팅
 app = FastAPI()
 app.add_middleware(
@@ -89,6 +87,9 @@ recent_places = Queue()
 
 @app.get("/places/{category}")
 def get_places(category: str, lat: float = Query(None), lng: float = Query(None)):
+    if category not in VALID_CATEGORIES:
+        return {"error": "지원하지 않는 카테고리입니다."}
+
     if lat is None or lng is None:
         lat, lng = 37.337, 127.268  # 기본 위치
 
@@ -98,7 +99,7 @@ def get_places(category: str, lat: float = Query(None), lng: float = Query(None)
         "location": location_str,
         "radius": 5000,
         "language": "ko",
-        "key": API_KEY,  # .env에서 읽은 키 사용
+        "key": API_KEY,
         "type": category
     }
     res = requests.get(url, params=params)
