@@ -41,13 +41,13 @@ DSproject/
 
 ### ① 백엔드 서버 (FastAPI)
 
+```text
 1. `backend` 폴더로 이동
 cd DSproject/backend
 
 2. 가상환경 활성화
 # Mac/Linux
 source venv/bin/activate
-
 # Windows
 venv\Scripts\activate
 
@@ -56,6 +56,7 @@ pip install -r requirements.txt
 
 4. 서버 실행
 uvicorn app:app --reload
+```
 
 - 기본 주소: http://127.0.0.1:8000
 - Swagger UI 확인: http://127.0.0.1:8000/docs
@@ -63,6 +64,7 @@ uvicorn app:app --reload
 
 ### ② 프론트엔드 서버 (React + Vite)
 
+```text
 1. frontend 폴더로 이동
 cd DSproject/frontend
 
@@ -71,6 +73,7 @@ npm install
 
 3. 서버 실행
 npm run dev
+```
 
 - 기본 주소: http://localhost:5173/
 
