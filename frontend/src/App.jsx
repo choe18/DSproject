@@ -70,6 +70,7 @@ function App() {
       <div style={{ marginBottom: 20 }}>
         <button onClick={() => setCategory("restaurant")}>🍽 식당</button>
         <button onClick={() => setCategory("cafe")}>☕ 카페</button>
+        <button onClick={() => setCategory("karaoke")}>🎤 노래방</button>
       </div>
 
       <div style={{ marginBottom: 20 }}>
