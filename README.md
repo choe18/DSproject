@@ -25,14 +25,15 @@
 DSproject/
 ├── backend/               # FastAPI 서버
 │   ├── app.py             # API 서버 메인 코드
-│   └── venv/              # 가상환경 (업로드 제외)
+│   ├── venv/              # 가상환경 (업로드 제외)
+│   └── .env               # FastAPI용 API Key
 ├── frontend/              # React 프론트엔드 (Vite 기반)
 │   ├── src/
 │   │   └── App.jsx
-│   └── node_modules/      # 설치 패키지 (업로드 제외)
-├── .env                   # API Key 설정
+│   ├── node_modules/      # 설치 패키지 (업로드 제외)
+│   └── .env               # React용 Google Maps API Key
 ├── .gitignore
-└── README.md
+└── README.mds
 ```
 
 ---
