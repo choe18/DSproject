@@ -2,11 +2,26 @@
 backend/venv/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.swp
+*.swo
 
 # Node
 frontend/node_modules/
+frontend/dist/
+frontend/.vite/
 
 # VS Code
 .vscode/
 
-.env
+# Environment variables
+backend/.env
+frontend/.env
+.env   
+
+# Mac
+.DS_Store
+
+# Logs
+*.log
