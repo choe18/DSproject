@@ -1,15 +1,21 @@
+// React 훅과 Google Maps 관련 컴포넌트 불러오기
 import { useState } from "react";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
+// 지도 컨테이너 스타일
 const containerStyle = { width: "100%", height: "400px" };
+// 지도 초기 중심 위치 (한국외국어대학교 글로벌캠퍼스)
 const defaultCenter = { lat: 37.337, lng: 127.268 };
 
-//거리 계산 함수
+// --------------------------------------------
+// 거리 계산 함수 (Haversine formula 사용)
+// --------------------------------------------
 function getDistance(lat1, lng1, lat2, lng2) {
   const R = 6371;
   const dLat = (lat2 - lat1) * (Math.PI / 180);
   const dLng = (lng2 - lng1) * (Math.PI / 180);
 
+  // Haversine 공식
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos(lat1 * (Math.PI / 180)) *
@@ -19,38 +25,50 @@ function getDistance(lat1, lng1, lat2, lng2) {
   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 }
 
+// --------------------------------------------
+// App 컴포넌트
+// --------------------------------------------
 function App() {
+  // 상태 관리
   const [category, setCategory] = useState("restaurant");
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [userLocation, setUserLocation] = useState(null);
 
+  // Google Maps API 로딩
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY
   });
 
+  // --------------------------------------------
+  // 추천 장소 가져오기 함수
+  // --------------------------------------------
   const fetchPlaces = async () => {
     if (!userLocation) {
       alert("내 위치를 먼저 가져와 주세요.");
       return;
     }
-    setLoading(true);
-    setError("");
+    setLoading(true);   // 로딩 시작
+    setError("");   // 기존 에러 초기화
     try {
+      // 백엔드 FastAPI 호출
       const res = await fetch(
         `http://127.0.0.1:8000/places/${category}?lat=${userLocation.lat}&lng=${userLocation.lng}`
       );
-      if (!res.ok) throw new Error("서버 에러");
-      const data = await res.json();
-      setPlaces(data);
+      if (!res.ok) throw new Error("서버 에러");   // HTTP 에러 처리
+      const data = await res.json();   // JSON 파싱
+      setPlaces(data);   // 장소 상태 업데이트
     } catch (e) {
-      setError(e.message);
+      setError(e.message);   // 에러 상태 업데이트
     } finally {
-      setLoading(false);
+      setLoading(false);   // 로딩 종료
     }
   };
 
+  // --------------------------------------------
+  // 사용자 현재 위치 가져오기
+  // --------------------------------------------
   const getUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -63,6 +81,9 @@ function App() {
     }
   };
 
+  // --------------------------------------------
+  // 렌더링
+  // --------------------------------------------
   return (
     <div style={{ padding: 30, fontFamily: "sans-serif" }}>
       <h1>위치 기반 가맹점 추천 서비스</h1>
@@ -118,4 +139,5 @@ function App() {
   );
 }
 
+// App 컴포넌트 export
 export default App;
