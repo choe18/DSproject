@@ -1,4 +1,5 @@
-# Data Structure Project: 사용자 위치 기반 가맹점 추천 서비스
+# Data Structure Project: 
+# 사용자 위치 기반 가맹점 추천 서비스
 
 ## 1. 프로젝트 개요
 **사용자 위치 기반 가맹점 추천 서비스**  
@@ -35,7 +36,7 @@ DSproject/
 │   ├── node_modules/      # 설치 패키지 (업로드 제외)
 │   └── .env               # React용 Google Maps API Key
 ├── .gitignore
-└── README.mds
+└── README.md
 ```
 
 ---
@@ -84,7 +85,7 @@ npm run dev
 
 ## 5. 사용 방법
 1. 브라우저에서 http://localhost:5173/ 접속
-2. 식당, 카페, 노래방 버튼 중 원하는 카테고리 선택
+2. 식당, 카페 중 원하는 카테고리 선택
 3. 추천받기 클릭 → 추천 장소 목록 표시
 4. 📍 내 위치 가져오기 클릭 → 지도에 내 위치 표시
 5. 지도 위에 추천 장소 마커 확인 가능
