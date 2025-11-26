@@ -1,5 +1,4 @@
-# Data Structure Project: 
-# 사용자 위치 기반 가맹점 추천 서비스
+# Data Structure Project: 사용자 위치 기반 가맹점 추천 서비스
 
 ## 1. 프로젝트 개요
 **사용자 위치 기반 가맹점 추천 서비스**  
