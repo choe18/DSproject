@@ -14,6 +14,7 @@ API_KEY = os.getenv("API_KEY")
 
 
 # 지원하는 카테고리 정의
+# 서비스가 제공하는 장소 종류를 제한하여 유효성 검사에 사용
 VALID_CATEGORIES = ["restaurant", "cafe"]
 
 
@@ -32,8 +33,8 @@ class Node:
 
 
 # 전체 장소를 관리하는 PlaceGraph
-# 여러 Node를 모아 관리(그래프 형태). 
-# 노드 추가, 노드 간 근접 연결, 거리 계산, 특정 카테고리 기준으로 사용자와 가까운 노드 정렬 등의 기능을 제공.
+# 여러 Node를 모아 관리(그래프 형태)
+# 노드 추가, 노드 간 근접 연결, 거리 계산, 특정 카테고리 기준으로 사용자와 가까운 노드 정렬 등의 기능을 제공
 class PlaceGraph:
     def __init__(self):
         self.nodes = []
@@ -56,7 +57,7 @@ class PlaceGraph:
 
 
     # 두 지점 간 거리 계산
-    # 두 좌표(위도/경도) 간의 대원거리(great-circle distance)를 계산해 미터 단위로 반환.
+    # 두 좌표(위도/경도) 간의 대원거리(great-circle distance)를 계산해 미터 단위로 반환
     def haversine(self, n1, n2):
         lon1, lat1, lon2, lat2 = map(radians, [n1.lng, n1.lat, n2.lng, n2.lat])
         dlon = lon2 - lon1
@@ -87,7 +88,7 @@ class Stack:
 
 
 # 선형 구조: 최근 추천 Queue (선입선출)
-# 최근 추천(최근에 추천한 장소를 일정 길이로 유지) 용도로 사용
+# 최근에 추천한 장소를 일정 길이로 유지하는 용도로 사용
 class Queue:
     def __init__(self):
         self._q = []
@@ -125,7 +126,7 @@ def get_places(category: str, lat: float = Query(None), lng: float = Query(None)
         return {"error": "지원하지 않는 카테고리입니다."}
 
     # 좌표 없을 시 적용되는 기본 좌표
-    # 입력이 없으면 기본 한국외대 글로벌캠퍼스 좌표 사용
+    # 입력이 없으면 기본 한국외국어대학교 글로벌캠퍼스 좌표 사용
     if lat is None or lng is None:
         lat, lng = 37.337, 127.268  # 한국외국어대학교 글로벌캠퍼스
 
