@@ -89,6 +89,7 @@ class Queue:
         return self._q.pop(0) if self._q else None
 
 
+
 # FastAPI 세팅
 app = FastAPI()
 app.add_middleware(
@@ -122,7 +123,7 @@ def get_places(category: str, lat: float = Query(None), lng: float = Query(None)
         "location": location_str,
         "radius": 5000,
         "language": "ko",
-        "key": API_KEY,
+        "key": API_KEY,  # .env에서 읽은 키 사용
         "type": category
     }
     res = requests.get(url, params=params)
